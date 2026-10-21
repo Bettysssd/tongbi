@@ -1,0 +1,122 @@
+:root {
+  --ink: light-dark(#1c1917, #f5f5f4);
+  --paper: light-dark(#f6f3ee, #161412);
+  --panel: light-dark(#fffdf9, #221f1c);
+  --line: light-dark(#e3dcd2, #3c362f);
+  --quiet: light-dark(#6f675e, #b7aea3);
+  --accent: #9a3412;
+  --good: light-dark(#166534, #86efac);
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+button, input, textarea { font: inherit; color: inherit; }
+
+button {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  color: light-dark(#fffdf9, #1c1917);
+  border-color: transparent;
+}
+
+button[aria-pressed="true"], button[aria-selected="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+
+button:disabled { cursor: wait; opacity: 0.7; }
+
+#app { max-width: 1080px; margin: 0 auto; padding: 20px 16px 40px; }
+
+.app {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+.mark { margin: 0; color: var(--accent); font-weight: 500; }
+h1 { margin: 2px 0 0; font-size: 18px; font-weight: 500; line-height: 1.3; }
+h2 { margin: 0 0 8px; font-size: 13px; font-weight: 500; color: var(--quiet); }
+.meta, .score-label, .hint { margin: 4px 0 0; color: var(--quiet); }
+.scorebox { text-align: right; }
+.score { margin: 0; font-size: 32px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--accent); line-height: 1; }
+.metrics { margin: 6px 0 0; color: var(--quiet); display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.metrics b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.tabs, .chips, .actions, .row-actions, .intake-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tabs { margin: 14px 0; }
+.chips { margin: 14px 0; }
+
+.cols, .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pane, .detail, .result, .intake {
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 10px;
+}
+.intake { margin-top: 14px; }
+.intake textarea { min-height: 180px; }
+.file-name { margin-top: 8px; width: 100%; border: 0; background: transparent; }
+
+pre, textarea {
+  margin: 0;
+  width: 100%;
+  min-height: 292px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  resize: vertical;
+}
+pre.solo, .detail pre { min-height: 0; }
+.actions { margin: 12px 0; }
+.actions p, .result p, .detail p { margin: 0; }
+.reasons { margin: 0; display: grid; gap: 8px; }
+.reasons div { display: grid; grid-template-columns: 88px 1fr; gap: 8px; }
+dt { color: var(--quiet); }
+dd { margin: 0; }
+.error { color: var(--accent); margin: 8px 0 0; }
+.issue { margin-top: 8px; }
+.issue-row { width: 100%; display: flex; justify-content: space-between; gap: 8px; text-align: left; border-radius: 10px; }
+.issue-title { font-weight: 500; }
+.status { color: var(--quiet); }
+.status.done { color: var(--good); }
+.detail { margin-top: 8px; }
+fieldset { border: 0; margin: 12px 0 0; padding: 0; }
+legend { font-weight: 500; margin-bottom: 6px; }
+form label { display: flex; gap: 8px; align-items: center; margin: 4px 0; }
+.result { margin-top: 12px; display: grid; gap: 6px; }
+.foot { margin: 10px 2px 0; color: var(--quiet); }
+
+@media (max-width: 800px) {
+  .cols, .pair, .reasons div { grid-template-columns: 1fr; }
+  .scorebox { text-align: left; }
+  .metrics { justify-content: flex-start; }
+}
+@media (pointer: coarse) {
+  button { min-height: 44px; }
+}
