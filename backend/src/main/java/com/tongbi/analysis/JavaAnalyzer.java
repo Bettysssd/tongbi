@@ -117,16 +117,29 @@ public class JavaAnalyzer {
         if (code == null || code.trim().isEmpty()) {
             throw new IllegalArgumentException("请先贴一段 Java 代码。");
         }
-        String normalized = code.replace("\r\n", "\n").replace('\r', '\n').trim();
+        String normalized = code.replace("\r\n", "\n").replace("\r", "\n").trim();
+        CompilationUnit direct = tryParse(normalized);
+        if (direct != null) {
+            return new ParsedSource(normalized, direct, 0);
+        }
+        String classWrapped = "class TongbiHolder {\n" + normalized + "\n}\n";
+        CompilationUnit asClass = tryParse(classWrapped);
+        if (asClass != null && !asClass.findAll(MethodDeclaration.class).isEmpty()) {
+            return new ParsedSource(normalized, asClass, 1);
+        }
+        String interfaceWrapped = "interface TongbiHolder {\n" + normalized + "\n}\n";
+        CompilationUnit asInterface = tryParse(interfaceWrapped);
+        if (asInterface != null && !asInterface.findAll(MethodDeclaration.class).isEmpty()) {
+            return new ParsedSource(normalized, asInterface, 1);
+        }
+        throw new IllegalArgumentException("这段还不能当成 Java 方法解析。");
+    }
+
+    private CompilationUnit tryParse(String code) {
         try {
-            return new ParsedSource(normalized, parseUnit(normalized), 0);
+            return parseUnit(code);
         } catch (ParseProblemException ex) {
-            String wrapped = "class TongbiHolder {\n" + normalized + "\n}\n";
-            try {
-                return new ParsedSource(normalized, parseUnit(wrapped), 1);
-            } catch (ParseProblemException again) {
-                throw new IllegalArgumentException("这段还不能当成 Java 方法解析。");
-            }
+            return null;
         }
     }
 

@@ -95,6 +95,27 @@ class JavaAnalyzerTest {
         assertEquals(3, focus.getIssues().size());
     }
 
+    @Test
+    void defaultInterfaceMethodIsAnalyzed() {
+        String source = "default FlyQiuFieldFilter andThen(FlyQiuFieldFilter after) {\n"
+                + "    Objects.requireNonNull(after);\n"
+                + "    return (Field field, Class<?> clazz) -> {\n"
+                + "        boolean currentResult = this.filter(field, clazz);\n"
+                + "        if (!currentResult) {\n"
+                + "            return false; // 如果当前过滤器返回 false，则不再执行后续过滤器\n"
+                + "        }\n"
+                + "        return after.filter(field, clazz); // 执行后续过滤器\n"
+                + "    };\n"
+                + "}";
+        MethodFocus focus = analyzer.analyze(source);
+        assertEquals("andThen", focus.getMethodName());
+        assertEquals(null, focus.getClassName());
+        assertEquals(CollectionsEmpty.NONE, ids(focus));
+        assertTrue(focus.getSource().startsWith("default FlyQiuFieldFilter andThen"));
+        assertTrue(focus.getSource().contains("requireNonNull(after)"));
+        assertTrue(focus.getSuggestion().contains("Class<?>"));
+    }
+
     private java.util.List<String> ids(MethodFocus focus) {
         java.util.List<String> ids = new java.util.ArrayList<String>();
         for (CodeIssue issue : focus.getIssues()) {
